@@ -32,6 +32,7 @@ class MainMenuFragment : Fragment() {
         loadListProgressBar = view.findViewById(R.id.load_list_progressBar)
         recyclerView = view.findViewById<RecyclerView?>(R.id.main_menu_recycler).apply {
             this.layoutManager = GridLayoutManager(context, 10)
+            mainMenuViewModel.getItems()
         }
         updateUI()
 
@@ -42,6 +43,7 @@ class MainMenuFragment : Fragment() {
         mainMenuViewModel.iconsScreenState.observe(viewLifecycleOwner) { iconsScreenState ->
             when (iconsScreenState) {
                 is IconsScreenState.Result -> {
+                    loadListProgressBar.visibility = View.GONE
                     iconAdapter = IconAdapter(iconsScreenState.items)
                     recyclerView.adapter = iconAdapter
                 }

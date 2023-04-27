@@ -10,10 +10,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(mainMenuFragment, MainMenuFragment.TAG)
+                .add(R.id.fragment_container, mainMenuFragment)
                 .commit()
         }
     }

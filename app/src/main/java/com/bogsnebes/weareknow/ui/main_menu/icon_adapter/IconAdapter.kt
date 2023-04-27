@@ -19,9 +19,8 @@ class IconAdapter(private val icons: List<Icon>) : RecyclerView.Adapter<IconAdap
             if (icon != null) {
                 iconImageView.load(icon)
             } else {
-                iconImageView.load(R.drawable.ic_launcher_foreground)
+                iconImageView.load(R.drawable.ic_android_green_40dp)
             }
-
             iconNameTextView.text = icon.nameApp
         }
     }

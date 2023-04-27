@@ -22,6 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         tools:text="Telegram" />
 
 </LinearLayout>
