@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.bogsnebes.weareknow.R
 
 class IconAdapter(private val icons: List<Icon>) : RecyclerView.Adapter<IconAdapter.ViewHolder>() {
@@ -16,10 +17,14 @@ class IconAdapter(private val icons: List<Icon>) : RecyclerView.Adapter<IconAdap
         private val iconNameTextView: TextView = view.findViewById(R.id.icon_name_text_view)
 
         fun bind(icon: Icon) {
-            if (icon != null) {
-                iconImageView.load(icon)
+            if (icon.iconImage != null) {
+                iconImageView.load(R.drawable.billy_herrington) {
+                    transformations(CircleCropTransformation())
+                }
             } else {
-                iconImageView.load(R.drawable.ic_android_green_40dp)
+                iconImageView.load(R.drawable.ic_android_green_40dp) {
+                    transformations(CircleCropTransformation())
+                }
             }
             iconNameTextView.text = icon.nameApp
         }
