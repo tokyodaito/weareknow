@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Weareknow</string>
+    <string name="accessibility_service_description">Приложение для дебага</string>
 </resources>
