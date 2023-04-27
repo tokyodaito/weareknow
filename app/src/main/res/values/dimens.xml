@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  list_item_main_menu  -->
+    <dimen name="icon_size">40dp</dimen>
+    <dimen name="margins_from_other_elements">8dp</dimen>
+</resources>

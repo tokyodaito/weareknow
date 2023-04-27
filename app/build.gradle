@@ -37,6 +37,7 @@ ext {
     androidXAppCompatVersion = '1.6.1'
     materialDesignVersion = '1.8.0'
     constraintLayoutVersion = '2.1.4'
+    coilVersion = '2.3.0'
 }
 
 dependencies {
@@ -44,4 +45,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidXAppCompatVersion"
     implementation "com.google.android.material:material:$materialDesignVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    //  Work with images
+    implementation "io.coil-kt:coil:$coilVersion"
 }
