@@ -10,4 +10,7 @@
 
     <!--  fragment_settings  -->
     <color name="delete_button_red">#FF0000</color>
+
+    <!--  ActionAdapter  -->
+    <color name="transparent_black">#66000000</color>
 </resources>

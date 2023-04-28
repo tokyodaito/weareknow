@@ -1,17 +1,22 @@
 package com.bogsnebes.weareknow.ui.actions.actions_adapter
 
+import android.app.Activity
 import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.bogsnebes.weareknow.R
-import com.bogsnebes.weareknow.ui.actions.actions_adapter.dialog.ZoomableImageDialog
 
 class ActionAdapter(private val context: Context, private val actions: List<Action>) :
     RecyclerView.Adapter<ActionAdapter.ActionViewHolder>() {
@@ -42,12 +47,59 @@ class ActionAdapter(private val context: Context, private val actions: List<Acti
                             transformations(RoundedCornersTransformation(radius = 16f))
                         }
                     }, onSuccess = { _, _ ->
-                        actionImage.setOnClickListener {
-                            val dialog = ZoomableImageDialog.newInstance(action.imageResource!!)
-                            dialog.show(
-                                (context as AppCompatActivity).supportFragmentManager,
-                                "zoomable_image_dialog"
-                            )
+                        actionImage.setOnClickListener { view ->
+                            val context = view.context
+                            val zoomedImageView = ImageView(context).apply {
+                                layoutParams = FrameLayout.LayoutParams(
+                                    FrameLayout.LayoutParams.MATCH_PARENT,
+                                    FrameLayout.LayoutParams.MATCH_PARENT
+                                )
+                                scaleType = ImageView.ScaleType.FIT_CENTER
+                                setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        context,
+                                        R.color.transparent_black
+                                    )
+                                )
+
+                                action.imageResource?.let { path ->
+                                    load(path) {
+                                        crossfade(true)
+                                        listener(
+                                            onError = { _, _ ->
+                                                load(R.drawable.aynami_rei) {
+                                                    crossfade(true)
+                                                }
+                                            }
+                                        )
+                                    }
+                                }
+                                setOnClickListener {
+                                    (parent as? ViewGroup)?.removeView(this)
+                                }
+                            }
+
+                            val parentView =
+                                (context as? Activity)?.findViewById<ViewGroup>(android.R.id.content)
+                            parentView?.addView(zoomedImageView)
+
+                            zoomedImageView.elevation = 10f
+                            val paddingInPixels = TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP, 32f,
+                                context.resources.displayMetrics
+                            ).toInt()
+                            zoomedImageView.setPadding(paddingInPixels, paddingInPixels, paddingInPixels, paddingInPixels)
+
+                            val zoomInAnimation = ScaleAnimation(
+                                0.5f, 1f, 0.5f, 1f,
+                                Animation.RELATIVE_TO_SELF, 0.5f,
+                                Animation.RELATIVE_TO_SELF, 0.5f
+                            ).apply {
+                                duration = 300
+                                interpolator = AccelerateDecelerateInterpolator()
+                            }
+
+                            zoomedImageView.startAnimation(zoomInAnimation)
                         }
                     }
                 )
