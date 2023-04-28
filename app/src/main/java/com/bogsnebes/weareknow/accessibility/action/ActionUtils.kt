@@ -25,7 +25,7 @@ object ActionObject {
     const val ON = "на"
     const val ELEM = "элемент"
     const val BUTTON = "кнопку"
-    const val VIEW = "на окно"
+    const val VIEW = "окно"
 }
 
 data class Action(

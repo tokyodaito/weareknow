@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.bogsnebes.weareknow.accessibility.action.ActionObject.BUTTON
+import com.bogsnebes.weareknow.accessibility.action.ActionObject.ELEM
 import com.bogsnebes.weareknow.accessibility.action.ActionObject.ON_ELEM
 import com.bogsnebes.weareknow.accessibility.action.ActionObject.VIEW
 import com.bogsnebes.weareknow.accessibility.utils.Util.surroundString
@@ -49,7 +50,7 @@ object NodeUtil {
             clazz.contains("Button") -> BUTTON
             clazz.contains("Check") -> BUTTON
             clazz.contains("Plane") -> VIEW
-            clazz.contains("View") -> ON_ELEM
+            clazz.contains("View") -> ELEM
             else -> ""
         }
     }

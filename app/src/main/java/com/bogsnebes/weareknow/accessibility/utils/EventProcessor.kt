@@ -106,7 +106,7 @@ object EventProcessor {
                     if (durationScroll > SYSTEM_GARBAGE) {
                         val dur = TimeUnit.MILLISECONDS.toSeconds(durationScroll).toString()
                         ActionSaver.save(
-                            listOf(VIEW, SCROLL, dur, TIMEUNIT_SEC).filter { it != "" })
+                            listOf(VIEW, SCROLL, dur, TIMEUNIT_SEC))
                     }
                     durationScroll = 0
                     lastScrollTime = 0
