@@ -85,14 +85,15 @@ object EventProcessor {
         }
         SimpleScheduler().schedule("scroll", SCHEDULER_DELAY, 0) {
             val delay = SystemClock.elapsedRealtime() - lastScrollTime
-            println(delay)
             if (delay > SCROLL_DELAY) {
-                ActionSaver.save(ActionBuilder.createAction(
-                    listOf(
-                        VIEW, SCROLL,
-                        TimeUnit.MILLISECONDS.toSeconds(durationScroll).toString(), TIME_UNIT
-                    ).filter { it != "" }
-                ))
+                if (durationScroll > 10)
+                    ActionSaver.save(ActionBuilder.createAction(
+                        listOf(
+                            VIEW, SCROLL,
+                            TimeUnit.MILLISECONDS.toSeconds(durationScroll).toString(),
+                            TIME_UNIT
+                        ).filter { it != "" }
+                    ))
                 durationScroll = 0
                 lastScrollTime = 0
                 firstScrollTime = 0
