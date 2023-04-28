@@ -22,6 +22,10 @@ var intervalMillis = 300L
 var lastScreenTime = 0L
 
 fun cropBitmap(bitmap: Bitmap, rect: Rect): Bitmap {
+    if (rect.width() <= 0 || rect.height() <= 0) {
+        return bitmap
+    }
+
     val mutableBitmap = if (!bitmap.isMutable) {
         bitmap.copy(Bitmap.Config.ARGB_8888, true)
     } else {

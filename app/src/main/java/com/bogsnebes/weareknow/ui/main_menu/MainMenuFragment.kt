@@ -47,6 +47,14 @@ class MainMenuFragment : Fragment() {
             updateUI(view.context)
         }
 
+        iconAdapter = IconAdapter() {
+            (context as AppCompatActivity).supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, ActionsFragment.newInstance(it))
+                .addToBackStack(null)
+                .commit()
+        }
+
         return view
     }
 
@@ -62,14 +70,8 @@ class MainMenuFragment : Fragment() {
                     loadListProgressBar.visibility = View.GONE
                     if (iconsScreenState.items.isNotEmpty()) {
                         dataIsEmptyLinearLayout.visibility = View.GONE
-                        iconAdapter = IconAdapter(iconsScreenState.items.toMutableList()) {
-                            (context as AppCompatActivity).supportFragmentManager
-                                .beginTransaction()
-                                .replace(R.id.fragment_container, ActionsFragment.newInstance(it))
-                                .addToBackStack(null)
-                                .commit()
-                        }
                         recyclerView.adapter = iconAdapter
+                        iconAdapter.setIcons(iconsScreenState.items)
                     } else {
                         recyclerView.visibility = View.GONE
                         dataIsEmptyLinearLayout.visibility = View.VISIBLE

@@ -42,8 +42,15 @@ object EventProcessor {
                 SimpleWorker.executeInBackground {
                     if (!StatusSaver.IS_ON) {
                         when (event.eventType) {
-                            TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event, context)
-                            WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(event, service, context)
+                            TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(
+                                event,
+                                context
+                            )
+                            WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(
+                                event,
+                                service,
+                                context
+                            )
                             TYPE_VIEW_SCROLLED -> processScroll(event, context)
                             TYPE_VIEW_SELECTED -> processSelecting(event, context)
                         }
@@ -136,10 +143,12 @@ object EventProcessor {
                 if (delay > SCROLL_DELAY) {
                     if (durationScroll > SYSTEM_GARBAGE) {
                         val dur = TimeUnit.MILLISECONDS.toSeconds(durationScroll).toString()
-                        ActionSaver.save(
-                            listOf(VIEW, SCROLL, dur, TIMEUNIT_SEC),
-                            context, event.packageName.toString()
-                        )
+                        event.packageName?.toString()?.let {
+                            ActionSaver.save(
+                                listOf(VIEW, SCROLL, dur, TIMEUNIT_SEC),
+                                context, it
+                            )
+                        }
                     }
                     durationScroll = 0
                     lastScrollTime = 0

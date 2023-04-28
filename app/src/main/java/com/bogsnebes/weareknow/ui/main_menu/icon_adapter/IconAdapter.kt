@@ -11,8 +11,12 @@ import coil.transform.CircleCropTransformation
 import com.bogsnebes.weareknow.R
 import com.bogsnebes.weareknow.ui.actions.actions_adapter.Action
 
-class IconAdapter(private val icons: List<Icon>, val openActionsFragment: (List<Action>) -> Unit) :
+class IconAdapter(
+    val openActionsFragment: (List<Action>) -> Unit
+) :
     RecyclerView.Adapter<IconAdapter.ViewHolder>() {
+
+    private val icons: MutableList<Icon> = mutableListOf()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val iconImageView: ImageView = view.findViewById(R.id.icon_image_view)
@@ -29,7 +33,7 @@ class IconAdapter(private val icons: List<Icon>, val openActionsFragment: (List<
                     }
                 )
             }
-                iconNameTextView.text = icon.nameApp
+            iconNameTextView.text = icon.nameApp
 
             itemView.setOnClickListener {
                 openActionsFragment(icon.actions)
@@ -48,4 +52,10 @@ class IconAdapter(private val icons: List<Icon>, val openActionsFragment: (List<
     }
 
     override fun getItemCount(): Int = icons.size
+
+    fun setIcons(newIcons: List<Icon>) {
+        icons.clear()
+        icons.addAll(newIcons)
+        notifyDataSetChanged()
+    }
 }

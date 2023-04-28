@@ -1,6 +1,5 @@
 package com.bogsnebes.weareknow.accessibility.utils
 
-import android.graphics.Rect
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.bogsnebes.weareknow.accessibility.action.ActionObject.BUTTON
@@ -58,9 +57,4 @@ object NodeUtil {
         return getType(node.className.toString())
     }
 
-    fun getHumanNodePosition(node: AccessibilityNodeInfo): String {
-        val rect = Rect()
-        node.getBoundsInScreen(rect)
-        return rect.toShortString()
-    }
 }
