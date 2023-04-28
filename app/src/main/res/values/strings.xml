@@ -3,6 +3,11 @@
 
     <!--  list_item_main_menu  -->
     <string name="image_of_app">Иконка приложения</string>
+
     <!--  MainMenuFragment  -->
     <string name="error_of_load_data">Ошибка загрузки данных</string>
+
+    <!--  bottom_navigation_menu  -->
+    <string name="main_menu">Меню</string>
+    <string name="settings">Настройки</string>
 </resources>
