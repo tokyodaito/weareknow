@@ -20,6 +20,7 @@ import com.bogsnebes.weareknow.accessibility.action.ActionType.MOVE
 import com.bogsnebes.weareknow.accessibility.action.ActionType.OPEN
 import com.bogsnebes.weareknow.accessibility.action.ActionType.SCROLL
 import com.bogsnebes.weareknow.accessibility.utils.AcsUtils.mkRect
+import com.bogsnebes.weareknow.common.StatusSaver
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
@@ -39,11 +40,13 @@ object EventProcessor {
         runBlocking {
             launch {
                 SimpleWorker.executeInBackground {
-                    when (event.eventType) {
-                        TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event, context)
-                        WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(event, service, context)
-                        TYPE_VIEW_SCROLLED -> processScroll(event, context)
-                        TYPE_VIEW_SELECTED -> processSelecting(event, context)
+                    if (!StatusSaver.IS_ON) {
+                        when (event.eventType) {
+                            TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event, context)
+                            WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(event, service, context)
+                            TYPE_VIEW_SCROLLED -> processScroll(event, context)
+                            TYPE_VIEW_SELECTED -> processSelecting(event, context)
+                        }
                     }
                 }
             }

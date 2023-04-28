@@ -56,7 +56,7 @@ class ScreenshotCallBack(
             }
             Log.e("ScreenshotCallBack", "Скриншот успешно сохранен")
         } catch (ex: Exception) {
-            Log.e("ScreenshotCallBack", "Не возможно получить скриншот", ex)
+            Log.e("ScreenshotCallBack", "Не возможно получить скриншот")
         }
     }
 

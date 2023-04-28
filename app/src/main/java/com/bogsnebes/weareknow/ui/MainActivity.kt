@@ -3,6 +3,7 @@ package com.bogsnebes.weareknow.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bogsnebes.weareknow.R
+import com.bogsnebes.weareknow.common.StatusSaver
 import com.bogsnebes.weareknow.ui.main_menu.MainMenuFragment
 import com.bogsnebes.weareknow.ui.settings.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -44,5 +45,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationListener)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        StatusSaver.IS_ON = true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        StatusSaver.IS_ON = false
     }
 }
