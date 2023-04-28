@@ -39,11 +39,15 @@ class MainMenuFragment : Fragment() {
                 flexDirection = FlexDirection.ROW
                 justifyContent = JustifyContent.SPACE_EVENLY
             }
-            mainMenuViewModel.getItems(view.context)
             updateUI(view.context)
         }
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        view?.context?.let { mainMenuViewModel.getItems(it) }
     }
 
     private fun updateUI(context: Context) {
@@ -51,7 +55,7 @@ class MainMenuFragment : Fragment() {
             when (iconsScreenState) {
                 is IconsScreenState.Result -> {
                     loadListProgressBar.visibility = View.GONE
-                    iconAdapter = IconAdapter(iconsScreenState.items) {
+                    iconAdapter = IconAdapter(iconsScreenState.items.toMutableList()) {
                         (context as AppCompatActivity).supportFragmentManager
                             .beginTransaction()
                             .replace(R.id.fragment_container, ActionsFragment.newInstance(it))
