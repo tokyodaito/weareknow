@@ -7,10 +7,10 @@ object ActionConst{
 }
 
 object ActionSubject {
-    const val SYSTEM = "система"
-    const val APP = "приложение"
-    const val USER = "пользователь"
-    const val VIEW = "окно"
+    const val SYSTEM = "Система"
+    const val APP = "Приложение"
+    const val USER = "Пользователь"
+    const val VIEW = "Окно"
 }
 
 object ActionType {
@@ -39,8 +39,6 @@ data class Action(
 
 object ActionBuilder {
     fun createAction(options: List<String>): Action {
-        options[0].replaceFirstChar { it.titlecaseChar() }
-
         return Action(options.joinToString(" "), Timestamp(System.currentTimeMillis()))
     }
 }
