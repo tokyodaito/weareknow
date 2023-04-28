@@ -22,5 +22,8 @@
     <string name="data_deleted">Данные удалены</string>
     <string name="error_delete_of_data">Ошибка удаленния данных</string>
 
+    <!--  SettingsViewModel  -->
+    <string name="enable_instruction">Ввод -> Показывать нажатия</string>
+
     <string name="accessibility_service_description">Приложение для дебага</string>
 </resources>

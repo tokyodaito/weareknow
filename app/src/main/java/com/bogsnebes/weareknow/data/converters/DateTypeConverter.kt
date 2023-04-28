@@ -1,16 +1,17 @@
 package com.bogsnebes.weareknow.data.converters
 
 import androidx.room.TypeConverter
-import java.util.*
+import java.sql.Timestamp
 
 class DateTypeConverter {
     @TypeConverter
-    fun toDate(timestamp: Long?): Date? {
-        return timestamp?.let { Date(it) }
+    fun fromTimestamp(timestamp: Timestamp): Long {
+        return timestamp.time
     }
 
     @TypeConverter
-    fun toTimestamp(date: Date?): Long? {
-        return date?.time
+    fun toTimestamp(time: Long): Timestamp {
+        return Timestamp(time)
     }
+
 }

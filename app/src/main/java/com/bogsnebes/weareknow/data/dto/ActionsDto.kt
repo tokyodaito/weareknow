@@ -3,7 +3,7 @@ package com.bogsnebes.weareknow.data.dto
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
+import java.sql.Timestamp
 
 @Entity(tableName = "actions")
 data class ActionsDto(
@@ -11,7 +11,7 @@ data class ActionsDto(
     val id: Long = 0,
     @ColumnInfo(name = "app_name")
     var appName: String,
-    var date: Date,
+    var date: Timestamp,
     var action: String,
     @ColumnInfo(name = "screenshot_path")
     var screenshotPath: String? = null

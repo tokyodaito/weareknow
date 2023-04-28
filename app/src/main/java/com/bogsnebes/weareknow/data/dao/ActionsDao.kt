@@ -2,6 +2,7 @@ package com.bogsnebes.weareknow.data.dao
 
 import androidx.room.*
 import com.bogsnebes.weareknow.data.dto.ActionsDto
+import java.sql.Timestamp
 import java.util.*
 
 @Dao
@@ -26,24 +27,24 @@ interface ActionsDao {
     suspend fun getActionsByAppName(appName: String): List<ActionsDto>
 
     @Query("SELECT * FROM actions WHERE date = :date")
-    suspend fun getActionsByDate(date: Date): List<ActionsDto>
+    suspend fun getActionsByDate(date: Timestamp): List<ActionsDto>
 
     @Query("SELECT * FROM actions WHERE action = :action")
     suspend fun getActionsByAction(action: String): List<ActionsDto>
 
     @Query("SELECT * FROM actions WHERE app_name = :appName AND date = :date")
-    suspend fun getActionsByAppNameAndDate(appName: String, date: Date): List<ActionsDto>
+    suspend fun getActionsByAppNameAndDate(appName: String, date: Timestamp): List<ActionsDto>
 
     @Query("SELECT * FROM actions WHERE app_name = :appName AND action = :action")
     suspend fun getActionsByAppNameAndAction(appName: String, action: String): List<ActionsDto>
 
     @Query("SELECT * FROM actions WHERE date = :date AND action = :action")
-    suspend fun getActionsByDateAndAction(date: Date, action: String): List<ActionsDto>
+    suspend fun getActionsByDateAndAction(date: Timestamp, action: String): List<ActionsDto>
 
     @Query("SELECT * FROM actions WHERE app_name = :appName AND date = :date AND action = :action")
     suspend fun getActionsByAppNameDateAndAction(
         appName: String,
-        date: Date,
+        date: Timestamp,
         action: String
     ): List<ActionsDto>
 }
