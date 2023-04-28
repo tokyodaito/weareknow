@@ -19,11 +19,10 @@ object NodeUtil {
     }
 
     fun getUsefulTextFromEvent(event: AccessibilityEvent): String {
-        if (event.text.size > 0) return surroundString(event.text.toString(), "\"")
         if (event.contentDescription != null) return surroundString(
-            event.contentDescription.toString(),
-            "\""
+            event.contentDescription.toString(), "\""
         )
+        if (event.text.size > 0) return surroundString(event.text.toString(), "\"")
         return ""
     }
 
@@ -33,7 +32,7 @@ object NodeUtil {
         val text = getUsefulTextFromNode(node)
         if (text != "") return text
 
-        for (i in 0..node.childCount) {
+        for (i in 0 until node.childCount) {
             val child = node.getChild(i) ?: continue
             try {
                 val resultText = getUsefulTextFromNode(child)

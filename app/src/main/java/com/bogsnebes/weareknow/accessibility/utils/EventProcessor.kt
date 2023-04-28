@@ -17,6 +17,8 @@ import com.bogsnebes.weareknow.accessibility.action.ActionSubject.VIEW
 import com.bogsnebes.weareknow.accessibility.action.ActionType.CLICK
 import com.bogsnebes.weareknow.accessibility.action.ActionType.OPEN
 import com.bogsnebes.weareknow.accessibility.action.ActionType.SCROLL
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 
 object EventProcessor {
@@ -31,12 +33,17 @@ object EventProcessor {
     private var lastScrollTime = 0L
 
     fun process(event: AccessibilityEvent, service: AccessibilityService, context: Context) {
-        when (event.eventType) {
-            TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event)
-            WINDOWS_CHANGE_ACTIVE -> processWindow(event, service, context)
-            TYPE_VIEW_SCROLLED -> processScroll(event)
+        runBlocking {
+            launch {
+                SimpleWorker.executeInBackground {
+                    when (event.eventType) {
+                        TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event)
+                        WINDOWS_CHANGE_ACTIVE -> processWindow(event, service, context)
+                        TYPE_VIEW_SCROLLED -> processScroll(event)
+                    }
+                }
+            }
         }
-        processScroll(event)
     }
 
     private fun processEvent(event: AccessibilityEvent) {
@@ -49,7 +56,8 @@ object EventProcessor {
     }
 
     private fun processClick(event: AccessibilityEvent) {
-        val node = event.source ?: return processEvent(event)
+        if (event.contentDescription != null) return processEvent(event)
+        val node = event.source ?: return
 
         try {
             val text = NodeUtil.getUsefulTextFromHierarchy(node)
