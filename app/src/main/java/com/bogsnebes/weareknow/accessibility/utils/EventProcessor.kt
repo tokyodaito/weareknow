@@ -9,6 +9,8 @@ import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityEvent.*
 import com.bogsnebes.weareknow.accessibility.action.ActionConst.TIMEUNIT_SEC
+import com.bogsnebes.weareknow.accessibility.action.ActionObject.ELEM
+import com.bogsnebes.weareknow.accessibility.action.ActionObject.ON
 import com.bogsnebes.weareknow.accessibility.action.ActionSaver
 import com.bogsnebes.weareknow.accessibility.action.ActionSubject.SYSTEM
 import com.bogsnebes.weareknow.accessibility.action.ActionSubject.USER
@@ -47,29 +49,33 @@ object EventProcessor {
         }
     }
 
-    private fun processEvent(event: AccessibilityEvent, type: String) {
-        val text = NodeUtil.getUsefulTextFromEvent(event)
-        if (text == "") return
-        val nodeType = NodeUtil.getType(event.className.toString())
-        ActionSaver.save(
-            listOf(USER, type, nodeType, text)
-        )
-    }
-
-    private fun processClick(event: AccessibilityEvent) {
-        if (event.contentDescription != null) return processEvent(event, CLICK)
+    private fun processAbstractNode(event: AccessibilityEvent, eventOptions: List<String>) {
+        if (event.contentDescription != null) return processAbstractEvent(event, eventOptions)
         val node = event.source ?: return
 
         try {
             val text = NodeUtil.getUsefulTextFromHierarchy(node)
             if (text == "") return
             val nodeType = NodeUtil.getNodeType(node)
-            ActionSaver.save(
-                listOf(USER, CLICK, nodeType, text)
-            )
+            ActionSaver.save(eventOptions + listOf(nodeType, text))
         } finally {
             node.recycle()
         }
+    }
+
+    private fun processAbstractEvent(event: AccessibilityEvent, options: List<String>) {
+        val text = NodeUtil.getUsefulTextFromEvent(event)
+        if (text == "") return
+        val nodeType = NodeUtil.getType(event.className.toString())
+        ActionSaver.save(options + listOf(nodeType, text))
+    }
+
+    private fun processClick(event: AccessibilityEvent) {
+        processAbstractNode(event, listOf(USER, CLICK, ON))
+    }
+
+    private fun processSelecting(event: AccessibilityEvent) {
+        processAbstractNode(event, listOf(USER, MOVE, ELEM))
     }
 
     @SuppressLint("NewApi")
@@ -107,20 +113,6 @@ object EventProcessor {
                     firstScrollTime = 0
                 }
             }
-        }
-    }
-
-    private fun processSelecting(event: AccessibilityEvent) {
-        if (event.contentDescription != null) return processEvent(event, MOVE)
-        val node = event.source ?: return
-
-        try {
-            val text = NodeUtil.getUsefulTextFromHierarchy(node)
-            if (text == "") return
-            val nodeType = NodeUtil.getNodeType(node)
-            ActionSaver.save(listOf(USER, MOVE, nodeType, text))
-        } finally {
-            node.recycle()
         }
     }
 }

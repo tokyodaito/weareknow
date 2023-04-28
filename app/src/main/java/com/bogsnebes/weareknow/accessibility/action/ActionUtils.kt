@@ -22,7 +22,7 @@ object ActionType {
 }
 
 object ActionObject {
-    const val ON_ELEM = "на элемент"
+    const val ON = "на"
     const val ELEM = "элемент"
     const val BUTTON = "кнопку"
     const val VIEW = "на окно"
