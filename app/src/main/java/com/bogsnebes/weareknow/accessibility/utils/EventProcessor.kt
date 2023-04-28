@@ -38,7 +38,7 @@ object EventProcessor {
                 SimpleWorker.executeInBackground {
                     when (event.eventType) {
                         TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event)
-                        WINDOWS_CHANGE_ACTIVE -> processWindow(event, service, context)
+                        WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(event, service, context)
                         TYPE_VIEW_SCROLLED -> processScroll(event)
                     }
                 }
