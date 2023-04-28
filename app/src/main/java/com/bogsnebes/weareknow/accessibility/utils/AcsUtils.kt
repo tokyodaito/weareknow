@@ -30,7 +30,6 @@ class ScreenshotCallBack(
             val folder = File(context.filesDir, "images")
             folder.mkdirs()
 
-            // Создаем файл для сохранения изображения
             val file = File(folder, SystemClock.elapsedRealtime().toString())
 
             //ToDo добавить в ДБ ссылку на файл
