@@ -1,3 +1,4 @@
+import android.util.Log
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -14,24 +15,29 @@ class SimpleScheduler(
         repeatInterval: Long = 0,
         action: suspend () -> Unit
     ) {
-        cancel(id)
+        try {
+            cancel(id)
 
-        val job = CoroutineScope(mainContext).launch {
-            if (delay > 0) {
-                delay(delay)
-            }
-
-            if (repeatInterval > 0) {
-                while (isActive) {
-                    withContext(ioContext) { action() }
-                    delay(repeatInterval)
+            val job = CoroutineScope(mainContext).launch {
+                if (delay > 0) {
+                    delay(delay)
                 }
-            } else {
-                withContext(ioContext) { action() }
-            }
-        }
 
-        jobs[id] = job
+                if (repeatInterval > 0) {
+                    while (isActive) {
+                        withContext(ioContext) { action() }
+                        delay(repeatInterval)
+                    }
+                } else {
+                    withContext(ioContext) { action() }
+                }
+            }
+
+            jobs[id] = job
+        } catch (ex: Exception) {
+            Log.e("Scheduler", ex.message, ex)
+            cancel(id)
+        }
     }
 
     fun cancel(id: String) {

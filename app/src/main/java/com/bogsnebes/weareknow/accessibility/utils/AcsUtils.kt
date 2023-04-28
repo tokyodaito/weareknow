@@ -1,6 +1,5 @@
 package com.bogsnebes.weareknow.accessibility.utils
 
-import android.accessibilityservice.AccessibilityGestureEvent
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityService.ScreenshotResult
 import android.accessibilityservice.AccessibilityService.TakeScreenshotCallback
@@ -22,21 +21,13 @@ lateinit var currentView: Bitmap
 var intervalMillis = 300L
 var lastScreenTime = 0L
 
-private fun cropBitmap(bitmap: Bitmap, rect: Rect): Bitmap {
-    if (rect.left < 0 || rect.top < 0 || rect.right > bitmap.width || rect.bottom > bitmap.height) {
-        Log.e("ScreenshotCallBack", "Область обрезки выходит за пределы изображения")
-        return bitmap
+fun cropBitmap(bitmap: Bitmap, rect: Rect): Bitmap {
+    val mutableBitmap = if (!bitmap.isMutable) {
+        bitmap.copy(Bitmap.Config.ARGB_8888, true)
+    } else {
+        bitmap
     }
-
-    val croppedBitmap = Bitmap.createBitmap(rect.width(), rect.height(), bitmap.config)
-    for (y in 0 until rect.height()) {
-        for (x in 0 until rect.width()) {
-            val pixel = bitmap.getPixel(rect.left + x, rect.top + y)
-            croppedBitmap.setPixel(x, y, pixel)
-        }
-    }
-
-    return croppedBitmap
+    return Bitmap.createBitmap(mutableBitmap, rect.left, rect.top, rect.width(), rect.height())
 }
 
 @RequiresApi(Build.VERSION_CODES.R)
@@ -53,10 +44,10 @@ class ScreenshotCallBack(
             rect?.let {
                 currentView = cropBitmap(currentView, rect)
             }
-            val folder = File(context.filesDir, "images")
+            val folder = File(context.applicationContext.externalCacheDir, "images")
             folder.mkdirs()
 
-            val file = File(folder, SystemClock.elapsedRealtime().toString())
+            val file = File(folder, SystemClock.elapsedRealtime().toString() + ".jpeg")
 
             actionsDto.screenshotPath = file.absolutePath
             ActionSaver.save(actionsDto, context)
@@ -90,10 +81,10 @@ object AcsUtils {
     ): String {
         try {
             val bitmap = cropBitmap(currentView, rect)
-            val folder = File(context.filesDir, "images")
+            val folder = File(context.applicationContext.externalCacheDir, "images")
             folder.mkdirs()
 
-            val file = File(folder, SystemClock.elapsedRealtime().toString())
+            val file = File(folder, SystemClock.elapsedRealtime().toString() + ".jpeg")
 
             FileOutputStream(file).use {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 85, it)

@@ -11,18 +11,21 @@ object ActionSaver {
         screenshotPath: String? = null,
         filter: (String) -> Boolean = { it != "" }
     ) {
-        ActionImpl(context).insert(
-            ActionsDto(
-                appName = appPkg,
-                date = Timestamp(System.currentTimeMillis()),
-                action = options.filter(filter).joinToString(" "),
-                screenshotPath = screenshotPath
-            )
+        val actionsDto = ActionsDto(
+            appName = appPkg,
+            date = Timestamp(System.currentTimeMillis()),
+            action = options.filter(filter).joinToString(" "),
+            screenshotPath = screenshotPath
         )
+        ActionImpl(context).insert(
+            actionsDto
+        )
+        println(actionsDto)
     }
 
     fun save(actionsDto: ActionsDto, context: Context) {
         ActionImpl(context).insert(actionsDto)
+        println(actionsDto)
     }
 
     fun build(

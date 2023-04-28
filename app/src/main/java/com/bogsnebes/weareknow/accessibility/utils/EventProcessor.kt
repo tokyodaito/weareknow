@@ -59,7 +59,7 @@ object EventProcessor {
         if (event.contentDescription != null) return processAbstractEvent(
             event,
             eventOptions,
-            context
+            context, screen
         )
         val node = event.source ?: return
 
@@ -79,14 +79,15 @@ object EventProcessor {
     private fun processAbstractEvent(
         event: AccessibilityEvent,
         options: List<String>,
-        context: Context
+        context: Context,
+        screen: String? = null
     ) {
         val text = NodeUtil.getUsefulTextFromEvent(event)
         if (text == "") return
         val nodeType = NodeUtil.getType(event.className.toString())
         ActionSaver.save(
             options + listOf(nodeType, text),
-            context, event.packageName.toString()
+            context, event.packageName.toString(), screen
         )
     }
 
