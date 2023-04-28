@@ -24,6 +24,11 @@ class MainMenuFragment : Fragment() {
     private lateinit var iconAdapter: IconAdapter
     private lateinit var loadListProgressBar: ProgressBar
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mainMenuViewModel.getItems()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,7 +38,6 @@ class MainMenuFragment : Fragment() {
         loadListProgressBar = view.findViewById(R.id.load_list_progressBar)
         recyclerView = view.findViewById<RecyclerView?>(R.id.main_menu_recycler).apply {
             this.layoutManager = GridLayoutManager(context, getCountOfColumnsForGridLayout())
-            mainMenuViewModel.getItems()
             updateUI(view.context)
         }
 
