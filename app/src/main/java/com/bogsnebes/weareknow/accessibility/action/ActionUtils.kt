@@ -2,17 +2,22 @@ package com.bogsnebes.weareknow.accessibility.action
 
 import java.sql.Timestamp
 
+object ActionConst{
+    const val TIME_UNIT = "у.е. времени"
+}
+
 object ActionSubject {
     const val SYSTEM = "система"
     const val APP = "приложение"
     const val USER = "пользователь"
+    const val VIEW = "окно"
 }
 
 object ActionType {
     const val CLICK = "нажал"
-    const val CLICK_LONG = "зажал"
     const val DRAG = "перенес"
     const val OPEN = "открыла"
+    const val SCROLL = "сколилось:"
 }
 
 object ActionObject {

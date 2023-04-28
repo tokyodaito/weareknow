@@ -6,8 +6,8 @@ import com.bogsnebes.weareknow.accessibility.utils.EventProcessor
 
 class MyAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-//        println(event.eventType)
-        EventProcessor.process(event)
+        println(event.eventType)
+        EventProcessor.process(event, this, applicationContext)
     }
 
     override fun onInterrupt() {
