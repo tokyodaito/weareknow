@@ -11,6 +11,11 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    </style>
+
+    <!--  fragment_settings  -->
+    <style name="DeleteButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:backgroundTint">@color/delete_button_red</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 </resources>

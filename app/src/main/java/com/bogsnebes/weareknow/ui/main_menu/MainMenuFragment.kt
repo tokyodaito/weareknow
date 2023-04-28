@@ -1,5 +1,6 @@
 package com.bogsnebes.weareknow.ui.main_menu
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,7 +24,6 @@ class MainMenuFragment : Fragment() {
     private lateinit var iconAdapter: IconAdapter
     private lateinit var loadListProgressBar: ProgressBar
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,13 +34,13 @@ class MainMenuFragment : Fragment() {
         recyclerView = view.findViewById<RecyclerView?>(R.id.main_menu_recycler).apply {
             this.layoutManager = GridLayoutManager(context, getCountOfColumnsForGridLayout())
             mainMenuViewModel.getItems()
+            updateUI(view.context)
         }
-        updateUI()
 
         return view
     }
 
-    private fun updateUI() {
+    private fun updateUI(context: Context) {
         mainMenuViewModel.iconsScreenState.observe(viewLifecycleOwner) { iconsScreenState ->
             when (iconsScreenState) {
                 is IconsScreenState.Result -> {
@@ -50,7 +50,7 @@ class MainMenuFragment : Fragment() {
                 }
                 IconsScreenState.Loading -> loadListProgressBar.visibility = View.VISIBLE
                 is IconsScreenState.Error -> Toast.makeText(
-                    view?.context,
+                    context,
                     view?.resources?.getString(R.string.error_of_load_data),
                     Toast.LENGTH_SHORT
                 ).show()
@@ -61,7 +61,9 @@ class MainMenuFragment : Fragment() {
     private fun getCountOfColumnsForGridLayout(): Int {
         val displayMetrics = Resources.getSystem().displayMetrics
         val sizeOfIcon =
-            resources.getDimensionPixelSize(R.dimen.imageview_icon_size) + resources.getDimensionPixelSize(R.dimen.margins_from_other_elements)
+            resources.getDimensionPixelSize(R.dimen.imageview_icon_size) + resources.getDimensionPixelSize(
+                R.dimen.margins_from_other_elements
+            )
         return (displayMetrics.widthPixels / sizeOfIcon - 2)
     }
 
