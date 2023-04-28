@@ -13,6 +13,8 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import androidx.annotation.RequiresApi
+import com.bogsnebes.weareknow.accessibility.action.ActionSaver
+import com.bogsnebes.weareknow.data.dto.ActionsDto
 import java.io.File
 import java.io.FileOutputStream
 
@@ -41,7 +43,8 @@ private fun cropBitmap(bitmap: Bitmap, rect: Rect): Bitmap {
 class ScreenshotCallBack(
     private val context: Context,
     private val compressionQuality: Int,
-    private val rect: Rect? = null
+    private val rect: Rect? = null,
+    private val actionsDto: ActionsDto
 ) : TakeScreenshotCallback {
     override fun onSuccess(p0: ScreenshotResult) {
         try {
@@ -55,7 +58,8 @@ class ScreenshotCallBack(
 
             val file = File(folder, SystemClock.elapsedRealtime().toString())
 
-            //ToDo добавить в ДБ ссылку на файл
+            actionsDto.screenshotPath = file.absolutePath
+            ActionSaver.save(actionsDto, context)
             FileOutputStream(file).use {
                 currentView.compress(Bitmap.CompressFormat.JPEG, compressionQuality, it)
             }

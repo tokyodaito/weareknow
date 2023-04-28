@@ -50,8 +50,17 @@ object EventProcessor {
         }
     }
 
-    private fun processAbstractNode(event: AccessibilityEvent, eventOptions: List<String>, context: Context) {
-        if (event.contentDescription != null) return processAbstractEvent(event, eventOptions, context)
+    private fun processAbstractNode(
+        event: AccessibilityEvent,
+        eventOptions: List<String>,
+        context: Context,
+        screen: String? = null
+    ) {
+        if (event.contentDescription != null) return processAbstractEvent(
+            event,
+            eventOptions,
+            context
+        )
         val node = event.source ?: return
 
         try {
@@ -60,7 +69,7 @@ object EventProcessor {
             val nodeType = NodeUtil.getNodeType(node)
             ActionSaver.save(
                 eventOptions + listOf(nodeType, text),
-                context, event.packageName.toString()
+                context, event.packageName.toString(), screen
             )
         } finally {
             node.recycle()
@@ -82,8 +91,8 @@ object EventProcessor {
     }
 
     private fun processClick(event: AccessibilityEvent, context: Context) {
-        processAbstractNode(event, listOf(USER, CLICK, ON), context)
-        AcsUtils.takePostScreenshot(context, mkRect(event))
+        val screen = AcsUtils.takePostScreenshot(context, mkRect(event))
+        processAbstractNode(event, listOf(USER, CLICK, ON), context, screen)
     }
 
     private fun processSelecting(event: AccessibilityEvent, context: Context) {
@@ -95,15 +104,20 @@ object EventProcessor {
         event: AccessibilityEvent, service: AccessibilityService, context: Context
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            AcsUtils.takeScreenshot(service, context, ScreenshotCallBack(context, 85))
+            AcsUtils.takeScreenshot(
+                service, context, ScreenshotCallBack(
+                    context, 85,
+                    null,
+                    ActionSaver.build(
+                        listOf(
+                            SYSTEM, OPEN,
+                            Util.humanizePkg(event.packageName), event.text.toString()
+                        ).filter { it != "" && it != "[]" },
+                        event.packageName.toString()
+                    )
+                )
+            )
         }
-        ActionSaver.save(
-            listOf(
-                SYSTEM, OPEN,
-                Util.humanizePkg(event.packageName), event.text.toString()
-            ).filter { it != "" && it != "[]" },
-            context, event.packageName.toString()
-        )
     }
 
     private fun processScroll(event: AccessibilityEvent, context: Context) {
