@@ -19,6 +19,7 @@ import com.bogsnebes.weareknow.accessibility.action.ActionType.CLICK
 import com.bogsnebes.weareknow.accessibility.action.ActionType.MOVE
 import com.bogsnebes.weareknow.accessibility.action.ActionType.OPEN
 import com.bogsnebes.weareknow.accessibility.action.ActionType.SCROLL
+import com.bogsnebes.weareknow.accessibility.utils.AcsUtils.mkRect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
@@ -39,10 +40,11 @@ object EventProcessor {
             launch {
                 SimpleWorker.executeInBackground {
                     when (event.eventType) {
-                        TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event)
+                        TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event, context)
                         WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(event, service, context)
                         TYPE_VIEW_SCROLLED -> processScroll(event)
                         TYPE_VIEW_SELECTED -> processSelecting(event)
+                        TYPE_TOUCH_INTERACTION_START -> println("Salam")
                     }
                 }
             }
@@ -70,8 +72,9 @@ object EventProcessor {
         ActionSaver.save(options + listOf(nodeType, text))
     }
 
-    private fun processClick(event: AccessibilityEvent) {
+    private fun processClick(event: AccessibilityEvent, context: Context) {
         processAbstractNode(event, listOf(USER, CLICK, ON))
+        AcsUtils.takePostScreenshot(context, mkRect(event))
     }
 
     private fun processSelecting(event: AccessibilityEvent) {

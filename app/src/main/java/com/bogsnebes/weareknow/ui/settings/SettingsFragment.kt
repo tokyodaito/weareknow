@@ -29,8 +29,11 @@ class SettingsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         followAllAppsSwitch = view.findViewById<SwitchCompat?>(R.id.switch_follow_all_apps).apply {
             this.setOnClickListener {
-                CommonValues.IS_SPEC_ON = isChecked
-                AcsSetting.showAcsSetting(this.context)
+                if (!CommonValues.IS_SPEC_ON) {
+                    CommonValues.IS_SPEC_ON = isChecked
+                    AcsSetting.showAcsSetting(this.context)
+                    AcsSetting.openDeveloperSettings(this.context)
+                }
             }
         }
         deleteAllLogsButton = view.findViewById<Button?>(R.id.delete_all_logs_button).apply {
