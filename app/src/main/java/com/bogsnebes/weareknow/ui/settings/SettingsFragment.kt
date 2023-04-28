@@ -11,7 +11,6 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bogsnebes.weareknow.R
-import com.bogsnebes.weareknow.common.CommonValues
 
 class SettingsFragment : Fragment() {
     private val settingsViewModel by lazy {
@@ -29,13 +28,17 @@ class SettingsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         followAllAppsSwitch = view.findViewById<SwitchCompat?>(R.id.switch_follow_all_apps).apply {
             this.setOnClickListener {
-                if (!CommonValues.IS_SPEC_ON) {
-                    CommonValues.IS_SPEC_ON = isChecked
-                    AcsSetting.showAcsSetting(this.context)
-                    AcsSetting.openDeveloperSettings(this.context)
+                settingsViewModel.onSwitchStateChanged(requireContext(), isChecked) {
+                    Toast.makeText(
+                        view.context,
+                        resources.getString(R.string.enable_instruction),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
+            changeSwitchMode()
         }
+
         deleteAllLogsButton = view.findViewById<Button?>(R.id.delete_all_logs_button).apply {
             this.setOnClickListener {
                 settingsViewModel.deleteAllData()
@@ -43,9 +46,14 @@ class SettingsFragment : Fragment() {
             }
         }
 
-
-
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        view?.let {
+            settingsViewModel.checkSwitchState(it.context)
+        }
     }
 
     private fun showResultDeleteData(context: Context) {
@@ -63,6 +71,12 @@ class SettingsFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    private fun changeSwitchMode() {
+        settingsViewModel.switchState.observe(viewLifecycleOwner) { isChecked ->
+            followAllAppsSwitch.isChecked = isChecked
         }
     }
 

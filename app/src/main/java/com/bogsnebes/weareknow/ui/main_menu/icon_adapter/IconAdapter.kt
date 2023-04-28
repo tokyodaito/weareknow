@@ -18,7 +18,7 @@ class IconAdapter(private val icons: List<Icon>) : RecyclerView.Adapter<IconAdap
 
         fun bind(icon: Icon) {
             if (icon.iconImage != null) {
-                iconImageView.load(R.drawable.billy_herrington) {
+                iconImageView.load(icon.iconImage) {
                     transformations(CircleCropTransformation())
                 }
             } else {
