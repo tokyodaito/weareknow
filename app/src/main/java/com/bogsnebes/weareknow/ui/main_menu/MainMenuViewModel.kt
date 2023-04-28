@@ -46,16 +46,17 @@ class MainMenuViewModel(application: Application) : AndroidViewModel(application
             val actions = actionsImpl.getAllActions()
             val icons = actions.groupBy { it.appName }
                 .map { (appName, actionsList) ->
+                    var id = 1
                     val actionList = actionsList.map { actionDto ->
                         Action(
-                            id = actionDto.id.toInt(),
+                            id = id++,
                             action = actionDto.action,
                             date = actionDto.date.toString(),
                             imageResource = actionDto.screenshotPath
                         )
                     }
                     Icon(
-                        iconImage = null,
+                        iconImage = getAppIconByPackageName(context, appName),
                         nameApp = getAppLabel(context, appName),
                         actions = actionList
                     )
