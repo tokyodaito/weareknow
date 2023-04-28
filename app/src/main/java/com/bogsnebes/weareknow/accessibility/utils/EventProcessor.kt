@@ -42,43 +42,52 @@ object EventProcessor {
                     when (event.eventType) {
                         TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event, context)
                         WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(event, service, context)
-                        TYPE_VIEW_SCROLLED -> processScroll(event)
-                        TYPE_VIEW_SELECTED -> processSelecting(event)
-                        TYPE_TOUCH_INTERACTION_START -> println("Salam")
+                        TYPE_VIEW_SCROLLED -> processScroll(event, context)
+                        TYPE_VIEW_SELECTED -> processSelecting(event, context)
                     }
                 }
             }
         }
     }
 
-    private fun processAbstractNode(event: AccessibilityEvent, eventOptions: List<String>) {
-        if (event.contentDescription != null) return processAbstractEvent(event, eventOptions)
+    private fun processAbstractNode(event: AccessibilityEvent, eventOptions: List<String>, context: Context) {
+        if (event.contentDescription != null) return processAbstractEvent(event, eventOptions, context)
         val node = event.source ?: return
 
         try {
             val text = NodeUtil.getUsefulTextFromHierarchy(node)
             if (text == "") return
             val nodeType = NodeUtil.getNodeType(node)
-            ActionSaver.save(eventOptions + listOf(nodeType, text))
+            ActionSaver.save(
+                eventOptions + listOf(nodeType, text),
+                context, event.packageName.toString()
+            )
         } finally {
             node.recycle()
         }
     }
 
-    private fun processAbstractEvent(event: AccessibilityEvent, options: List<String>) {
+    private fun processAbstractEvent(
+        event: AccessibilityEvent,
+        options: List<String>,
+        context: Context
+    ) {
         val text = NodeUtil.getUsefulTextFromEvent(event)
         if (text == "") return
         val nodeType = NodeUtil.getType(event.className.toString())
-        ActionSaver.save(options + listOf(nodeType, text))
+        ActionSaver.save(
+            options + listOf(nodeType, text),
+            context, event.packageName.toString()
+        )
     }
 
     private fun processClick(event: AccessibilityEvent, context: Context) {
-        processAbstractNode(event, listOf(USER, CLICK, ON))
+        processAbstractNode(event, listOf(USER, CLICK, ON), context)
         AcsUtils.takePostScreenshot(context, mkRect(event))
     }
 
-    private fun processSelecting(event: AccessibilityEvent) {
-        processAbstractNode(event, listOf(USER, MOVE, ELEM))
+    private fun processSelecting(event: AccessibilityEvent, context: Context) {
+        processAbstractNode(event, listOf(USER, MOVE, ELEM), context)
     }
 
     @SuppressLint("NewApi")
@@ -92,11 +101,12 @@ object EventProcessor {
             listOf(
                 SYSTEM, OPEN,
                 Util.humanizePkg(event.packageName), event.text.toString()
-            ).filter { it != "" && it != "[]" }
+            ).filter { it != "" && it != "[]" },
+            context, event.packageName.toString()
         )
     }
 
-    private fun processScroll(event: AccessibilityEvent) {
+    private fun processScroll(event: AccessibilityEvent, context: Context) {
         if (firstScrollTime == 0L && durationScroll == 0L) {
             firstScrollTime = SystemClock.elapsedRealtime()
             lastScrollTime = SystemClock.elapsedRealtime()
@@ -109,7 +119,9 @@ object EventProcessor {
                     if (durationScroll > SYSTEM_GARBAGE) {
                         val dur = TimeUnit.MILLISECONDS.toSeconds(durationScroll).toString()
                         ActionSaver.save(
-                            listOf(VIEW, SCROLL, dur, TIMEUNIT_SEC))
+                            listOf(VIEW, SCROLL, dur, TIMEUNIT_SEC),
+                            context, event.packageName.toString()
+                        )
                     }
                     durationScroll = 0
                     lastScrollTime = 0
