@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bogsnebes.weareknow.R
+import com.bogsnebes.weareknow.common.CommonValues
 
 class SettingsFragment : Fragment() {
     private val settingsViewModel by lazy {
@@ -26,7 +27,12 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
-        followAllAppsSwitch = view.findViewById(R.id.switch_follow_all_apps)
+        followAllAppsSwitch = view.findViewById<SwitchCompat?>(R.id.switch_follow_all_apps).apply {
+            this.setOnClickListener {
+                CommonValues.IS_SPEC_ON = isChecked
+                AcsSetting.showAcsSetting(this.context)
+            }
+        }
         deleteAllLogsButton = view.findViewById<Button?>(R.id.delete_all_logs_button).apply {
             this.setOnClickListener {
                 settingsViewModel.deleteAllData()
