@@ -4,7 +4,6 @@ import android.accessibilityservice.AccessibilityGestureEvent
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
 import com.bogsnebes.weareknow.accessibility.utils.EventProcessor
-import com.bogsnebes.weareknow.gestures.GestureProcessor
 
 class MyAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
@@ -13,8 +12,7 @@ class MyAccessibilityService : AccessibilityService() {
     }
 
     override fun onGesture(gestureEvent: AccessibilityGestureEvent): Boolean {
-        println("Event: ${gestureEvent}")
-        GestureProcessor.process(gestureEvent, this, applicationContext)
+        println("Event: $gestureEvent")
         return true
     }
 
