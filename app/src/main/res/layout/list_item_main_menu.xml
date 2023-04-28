@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/size_of_layout_icon"
+    android:layout_height="@dimen/size_of_layout_icon"
+    android:layout_margin="@dimen/margins_from_other_elements"
+    android:orientation="vertical"
+    tools:ignore="UseCompoundDrawables">
+
+    <ImageView
+        android:id="@+id/icon_image_view"
+        android:layout_width="@dimen/imageview_icon_size"
+        android:layout_height="@dimen/imageview_icon_size"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/image_of_app"
+        tools:ignore="ImageContrastCheck"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/icon_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        tools:text="Telegram" />
+
+</LinearLayout>

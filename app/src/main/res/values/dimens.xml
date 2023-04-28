@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  list_item_main_menu  -->
+    <dimen name="imageview_icon_size">60dp</dimen>
+    <dimen name="margins_from_other_elements">8dp</dimen>
+    <dimen name="size_of_layout_icon">85dp</dimen>
+
+    <!--  fragment_main_menu  -->
+    <dimen name="layout_margin_vertical">16dp</dimen>
+    <dimen name="layout_margin_horizontal">8dp</dimen>
+</resources>

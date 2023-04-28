@@ -1,4 +1,26 @@
 <resources>
-    <string name="app_name">Weareknow</string>
+    <string name="app_name">WeAreKnow</string>
+
+    <!--  list_item_main_menu  -->
+    <string name="image_of_app">Иконка приложения</string>
+
+    <!--  MainMenuFragment  -->
+    <string name="error_of_load_data">Ошибка загрузки данных</string>
+
+    <!--  bottom_navigation_menu  -->
+    <string name="main_menu">Меню</string>
+    <string name="settings">Настройки</string>
+
+    <!--  fragment_settings   -->
+    <string name="setting_confiditional">Настройки конфидициальности</string>
+    <string name="follow_apps">Отслеживать приложения</string>
+    <string name="delete_of_data">Удаление данных</string>
+    <string name="cleat_all_logs_of_apps">Очистить логи всех приложений</string>
+    <string name="settings_header">Настройки</string>
+
+    <!--  SettingsFragment  -->
+    <string name="data_deleted">Данные удалены</string>
+    <string name="error_delete_of_data">Ошибка удаленния данных</string>
+
     <string name="accessibility_service_description">Приложение для дебага</string>
 </resources>
