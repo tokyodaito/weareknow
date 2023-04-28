@@ -1,9 +1,43 @@
 package com.bogsnebes.weareknow.accessibility.action
 
-object ActionSaver {
-    //DB connection
+import android.content.Context
+import com.bogsnebes.weareknow.data.dto.ActionsDto
+import com.bogsnebes.weareknow.data.impl.ActionImpl
+import java.sql.Timestamp
 
-    fun save(options: List<String>, filter: (String) -> Boolean = { it != "" }) {
-        println(ActionBuilder.createAction(options.filter(filter)))
+object ActionSaver {
+    fun save(
+        options: List<String>, context: Context, appPkg: String,
+        screenshotPath: String? = null,
+        filter: (String) -> Boolean = { it != "" }
+    ) {
+        val actionsDto = ActionsDto(
+            appName = appPkg,
+            date = Timestamp(System.currentTimeMillis()),
+            action = options.filter(filter).joinToString(" "),
+            screenshotPath = screenshotPath
+        )
+        ActionImpl(context).insert(
+            actionsDto
+        )
+        println(actionsDto)
+    }
+
+    fun save(actionsDto: ActionsDto, context: Context) {
+        ActionImpl(context).insert(actionsDto)
+        println(actionsDto)
+    }
+
+    fun build(
+        options: List<String>, appPkg: String,
+        screenshotPath: String? = null,
+        filter: (String) -> Boolean = { it != "" }
+    ): ActionsDto {
+        return ActionsDto(
+            appName = appPkg,
+            date = Timestamp(System.currentTimeMillis()),
+            action = options.filter(filter).joinToString(" "),
+            screenshotPath = screenshotPath
+        )
     }
 }

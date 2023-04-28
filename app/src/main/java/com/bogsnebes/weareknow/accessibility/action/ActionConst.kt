@@ -1,7 +1,5 @@
 package com.bogsnebes.weareknow.accessibility.action
 
-import java.sql.Timestamp
-
 object ActionConst{
     const val TIMEUNIT_SEC = "сек."
 }
@@ -26,19 +24,4 @@ object ActionObject {
     const val ELEM = "элемент"
     const val BUTTON = "кнопку"
     const val VIEW = "окно"
-}
-
-data class Action(
-    val action: String,
-    val timestamp: Timestamp
-) {
-    override fun toString(): String {
-        return "$timestamp: $action"
-    }
-}
-
-object ActionBuilder {
-    fun createAction(options: List<String>): Action {
-        return Action(options.joinToString(" "), Timestamp(System.currentTimeMillis()))
-    }
 }
