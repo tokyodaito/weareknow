@@ -38,7 +38,11 @@ object EventProcessor {
                 SimpleWorker.executeInBackground {
                     when (event.eventType) {
                         TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event)
-                        WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(event, service, context)
+                        WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(
+                            event,
+                            service,
+                            context
+                        )
                         TYPE_VIEW_SCROLLED -> processScroll(event)
                     }
                 }
@@ -80,7 +84,11 @@ object EventProcessor {
         }
         ActionSaver.save(
             ActionBuilder.createAction(
-                listOf(SYSTEM, OPEN, event.packageName.toString())
+                listOf(
+                    SYSTEM, OPEN,
+                    Util.humanizePkg(event.packageName), event.text.toString()
+                )
+                    .filter { it != "" && it != "[]" }
             )
         )
     }
