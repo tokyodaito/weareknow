@@ -7,5 +7,5 @@
 
     <!--  fragment_main_menu  -->
     <dimen name="layout_margin_vertical">16dp</dimen>
-    <dimen name="layout_margin_horizontal">16dp</dimen>
+    <dimen name="layout_margin_horizontal">8dp</dimen>
 </resources>

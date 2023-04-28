@@ -13,18 +13,18 @@
         android:layout_height="@dimen/imageview_icon_size"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/image_of_app"
-        tools:src="@tools:sample/avatars"
-        tools:ignore="ImageContrastCheck" />
+        tools:ignore="ImageContrastCheck"
+        tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:gravity="center"
         android:id="@+id/icon_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
-        android:maxLines="1"
         android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
         tools:text="Telegram" />
 
 </LinearLayout>
