@@ -18,10 +18,12 @@ object ActionType {
     const val DRAG = "перенес"
     const val OPEN = "открыла"
     const val SCROLL = "скролилось:"
+    const val MOVE = "переместил"
 }
 
 object ActionObject {
-    const val ELEM = "на элемент"
+    const val ON_ELEM = "на элемент"
+    const val ELEM = "элемент"
     const val BUTTON = "кнопку"
     const val VIEW = "на окно"
 }

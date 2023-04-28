@@ -8,13 +8,13 @@ import android.os.Build
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityEvent.*
-import com.bogsnebes.weareknow.accessibility.action.ActionBuilder
 import com.bogsnebes.weareknow.accessibility.action.ActionConst.TIMEUNIT_SEC
 import com.bogsnebes.weareknow.accessibility.action.ActionSaver
 import com.bogsnebes.weareknow.accessibility.action.ActionSubject.SYSTEM
 import com.bogsnebes.weareknow.accessibility.action.ActionSubject.USER
 import com.bogsnebes.weareknow.accessibility.action.ActionSubject.VIEW
 import com.bogsnebes.weareknow.accessibility.action.ActionType.CLICK
+import com.bogsnebes.weareknow.accessibility.action.ActionType.MOVE
 import com.bogsnebes.weareknow.accessibility.action.ActionType.OPEN
 import com.bogsnebes.weareknow.accessibility.action.ActionType.SCROLL
 import kotlinx.coroutines.launch
@@ -40,32 +40,33 @@ object EventProcessor {
                         TYPE_VIEW_CLICKED, TYPE_VIEW_LONG_CLICKED -> processClick(event)
                         WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(event, service, context)
                         TYPE_VIEW_SCROLLED -> processScroll(event)
+                        TYPE_VIEW_SELECTED -> processSelecting(event)
                     }
                 }
             }
         }
     }
 
-    private fun processEvent(event: AccessibilityEvent) {
+    private fun processEvent(event: AccessibilityEvent, type: String) {
         val text = NodeUtil.getUsefulTextFromEvent(event)
         if (text == "") return
         val nodeType = NodeUtil.getType(event.className.toString())
-        ActionSaver.save(ActionBuilder.createAction(
-            listOf(USER, CLICK, nodeType, text).filter { it != "" }
-        ))
+        ActionSaver.save(
+            listOf(USER, type, nodeType, text)
+        )
     }
 
     private fun processClick(event: AccessibilityEvent) {
-        if (event.contentDescription != null) return processEvent(event)
+        if (event.contentDescription != null) return processEvent(event, CLICK)
         val node = event.source ?: return
 
         try {
             val text = NodeUtil.getUsefulTextFromHierarchy(node)
             if (text == "") return
             val nodeType = NodeUtil.getNodeType(node)
-            ActionSaver.save(ActionBuilder.createAction(
-                listOf(USER, CLICK, nodeType, text).filter { it != "" }
-            ))
+            ActionSaver.save(
+                listOf(USER, CLICK, nodeType, text)
+            )
         } finally {
             node.recycle()
         }
@@ -79,13 +80,10 @@ object EventProcessor {
             AcsUtils.takeScreenshot(service, context, ScreenshotCallBack(context, 85))
         }
         ActionSaver.save(
-            ActionBuilder.createAction(
-                listOf(
-                    SYSTEM, OPEN,
-                    Util.humanizePkg(event.packageName), event.text.toString()
-                )
-                    .filter { it != "" && it != "[]" }
-            )
+            listOf(
+                SYSTEM, OPEN,
+                Util.humanizePkg(event.packageName), event.text.toString()
+            ).filter { it != "" && it != "[]" }
         )
     }
 
@@ -101,15 +99,28 @@ object EventProcessor {
                 if (delay > SCROLL_DELAY) {
                     if (durationScroll > SYSTEM_GARBAGE) {
                         val dur = TimeUnit.MILLISECONDS.toSeconds(durationScroll).toString()
-                        ActionSaver.save(ActionBuilder.createAction(
-                            listOf(VIEW, SCROLL, dur, TIMEUNIT_SEC).filter { it != "" }
-                        ))
+                        ActionSaver.save(
+                            listOf(VIEW, SCROLL, dur, TIMEUNIT_SEC).filter { it != "" })
                     }
                     durationScroll = 0
                     lastScrollTime = 0
                     firstScrollTime = 0
                 }
             }
+        }
+    }
+
+    private fun processSelecting(event: AccessibilityEvent) {
+        if (event.contentDescription != null) return processEvent(event, MOVE)
+        val node = event.source ?: return
+
+        try {
+            val text = NodeUtil.getUsefulTextFromHierarchy(node)
+            if (text == "") return
+            val nodeType = NodeUtil.getNodeType(node)
+            ActionSaver.save(listOf(USER, MOVE, nodeType, text))
+        } finally {
+            node.recycle()
         }
     }
 }
