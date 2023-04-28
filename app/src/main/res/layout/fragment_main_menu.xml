@@ -11,11 +11,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:itemCount="6"
-        tools:listitem="@layout/list_item_main_menu" />
+        tools:listitem="@layout/list_item_main_menu"
+        tools:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/load_list_progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        tools:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/data_is_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_cloud_off_24"
+            android:contentDescription="@string/data_is_empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/data_is_empty" />
+
+    </LinearLayout>
+
+
 </FrameLayout>

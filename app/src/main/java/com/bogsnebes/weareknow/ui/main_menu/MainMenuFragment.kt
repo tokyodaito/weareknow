@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,7 @@ class MainMenuFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var iconAdapter: IconAdapter
     private lateinit var loadListProgressBar: ProgressBar
+    private lateinit var dataIsEmptyLinearLayout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +35,9 @@ class MainMenuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main_menu, container, false)
+        dataIsEmptyLinearLayout = view.findViewById<LinearLayout?>(R.id.data_is_empty).apply {
+            this.visibility = View.GONE
+        }
         loadListProgressBar = view.findViewById(R.id.load_list_progressBar)
         recyclerView = view.findViewById<RecyclerView?>(R.id.main_menu_recycler).apply {
             this.layoutManager = FlexboxLayoutManager(context).apply {
@@ -55,14 +60,20 @@ class MainMenuFragment : Fragment() {
             when (iconsScreenState) {
                 is IconsScreenState.Result -> {
                     loadListProgressBar.visibility = View.GONE
-                    iconAdapter = IconAdapter(iconsScreenState.items.toMutableList()) {
-                        (context as AppCompatActivity).supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.fragment_container, ActionsFragment.newInstance(it))
-                            .addToBackStack(null)
-                            .commit()
+                    if (iconsScreenState.items.isNotEmpty()) {
+                        dataIsEmptyLinearLayout.visibility = View.GONE
+                        iconAdapter = IconAdapter(iconsScreenState.items.toMutableList()) {
+                            (context as AppCompatActivity).supportFragmentManager
+                                .beginTransaction()
+                                .replace(R.id.fragment_container, ActionsFragment.newInstance(it))
+                                .addToBackStack(null)
+                                .commit()
+                        }
+                        recyclerView.adapter = iconAdapter
+                    } else {
+                        recyclerView.visibility = View.GONE
+                        dataIsEmptyLinearLayout.visibility = View.VISIBLE
                     }
-                    recyclerView.adapter = iconAdapter
                 }
                 IconsScreenState.Loading -> loadListProgressBar.visibility = View.VISIBLE
                 is IconsScreenState.Error -> Toast.makeText(

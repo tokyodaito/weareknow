@@ -3,6 +3,7 @@
 
     <!--  list_item_main_menu  -->
     <string name="image_of_app">Иконка приложения</string>
+    <string name="data_is_empty">Нет данных для отображения</string>
 
     <!--  MainMenuFragment  -->
     <string name="error_of_load_data">Ошибка загрузки данных</string>
