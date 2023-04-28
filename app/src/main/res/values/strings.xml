@@ -25,5 +25,9 @@
     <!--  SettingsViewModel  -->
     <string name="enable_instruction">Ввод -> Показывать нажатия</string>
 
+    <!--  ActionAdapter  -->
+    <string name="action_text_format">%1$d. %2$s</string>
+
     <string name="accessibility_service_description">Приложение для дебага</string>
+    <string name="screenshot_of_action">Скриншот действия</string>
 </resources>

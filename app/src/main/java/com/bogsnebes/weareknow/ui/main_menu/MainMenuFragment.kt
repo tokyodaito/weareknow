@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bogsnebes.weareknow.R
+import com.bogsnebes.weareknow.ui.actions.ActionsFragment
 import com.bogsnebes.weareknow.ui.main_menu.icon_adapter.IconAdapter
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -25,11 +27,6 @@ class MainMenuFragment : Fragment() {
     private lateinit var iconAdapter: IconAdapter
     private lateinit var loadListProgressBar: ProgressBar
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainMenuViewModel.getItems()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,6 +39,7 @@ class MainMenuFragment : Fragment() {
                 flexDirection = FlexDirection.ROW
                 justifyContent = JustifyContent.SPACE_EVENLY
             }
+            mainMenuViewModel.getItems(view.context)
             updateUI(view.context)
         }
 
@@ -53,7 +51,13 @@ class MainMenuFragment : Fragment() {
             when (iconsScreenState) {
                 is IconsScreenState.Result -> {
                     loadListProgressBar.visibility = View.GONE
-                    iconAdapter = IconAdapter(iconsScreenState.items)
+                    iconAdapter = IconAdapter(iconsScreenState.items) {
+                        (context as AppCompatActivity).supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, ActionsFragment.newInstance(it))
+                            .addToBackStack(null)
+                            .commit()
+                    }
                     recyclerView.adapter = iconAdapter
                 }
                 IconsScreenState.Loading -> loadListProgressBar.visibility = View.VISIBLE

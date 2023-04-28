@@ -6,6 +6,6 @@
     <dimen name="size_of_layout_icon">85dp</dimen>
 
     <!--  fragment_main_menu  -->
-    <dimen name="layout_margin_vertical">16dp</dimen>
+    <dimen name="layout_margin_vertical">8dp</dimen>
     <dimen name="layout_margin_horizontal">8dp</dimen>
 </resources>

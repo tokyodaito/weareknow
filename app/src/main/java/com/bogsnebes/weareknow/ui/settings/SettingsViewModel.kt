@@ -10,7 +10,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
-
     private var _deleteDataScreenState: MutableLiveData<DeleteDataScreenState> = MutableLiveData()
     val deleteDataScreenState: LiveData<DeleteDataScreenState>
         get() = _deleteDataScreenState

@@ -9,24 +9,31 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.bogsnebes.weareknow.R
+import com.bogsnebes.weareknow.ui.actions.actions_adapter.Action
 
-class IconAdapter(private val icons: List<Icon>) : RecyclerView.Adapter<IconAdapter.ViewHolder>() {
+class IconAdapter(private val icons: List<Icon>, val openActionsFragment: (List<Action>) -> Unit) :
+    RecyclerView.Adapter<IconAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val iconImageView: ImageView = view.findViewById(R.id.icon_image_view)
         private val iconNameTextView: TextView = view.findViewById(R.id.icon_name_text_view)
 
         fun bind(icon: Icon) {
-            if (icon.iconImage != null) {
-                iconImageView.load(icon.iconImage) {
-                    transformations(CircleCropTransformation())
-                }
-            } else {
-                iconImageView.load(R.drawable.ic_android_green_40dp) {
-                    transformations(CircleCropTransformation())
-                }
+            iconImageView.load(icon.iconImage) {
+                transformations(CircleCropTransformation())
+                listener(
+                    onError = { _, _ ->
+                        iconImageView.load(R.drawable.aynami_rei) {
+                            transformations(CircleCropTransformation())
+                        }
+                    }
+                )
             }
-            iconNameTextView.text = icon.nameApp
+                iconNameTextView.text = icon.nameApp
+
+            itemView.setOnClickListener {
+                openActionsFragment(icon.actions)
+            }
         }
     }
 
