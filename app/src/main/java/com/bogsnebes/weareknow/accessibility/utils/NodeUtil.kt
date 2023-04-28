@@ -5,7 +5,6 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.bogsnebes.weareknow.accessibility.action.ActionObject.BUTTON
 import com.bogsnebes.weareknow.accessibility.action.ActionObject.ELEM
-import com.bogsnebes.weareknow.accessibility.action.ActionObject.ON_ELEM
 import com.bogsnebes.weareknow.accessibility.action.ActionObject.VIEW
 import com.bogsnebes.weareknow.accessibility.utils.Util.surroundString
 
