@@ -2,7 +2,7 @@ package com.bogsnebes.weareknow.accessibility.action
 
 import android.content.Context
 import com.bogsnebes.weareknow.data.dto.ActionsDto
-import com.bogsnebes.weareknow.data.impl.ActionImpl
+import com.bogsnebes.weareknow.data.impl.ActionsImpl
 import java.sql.Timestamp
 
 object ActionSaver {
@@ -17,14 +17,14 @@ object ActionSaver {
             action = options.filter(filter).joinToString(" "),
             screenshotPath = screenshotPath
         )
-        ActionImpl(context).insert(
+        ActionsImpl(context).insert(
             actionsDto
         )
         println(actionsDto)
     }
 
     fun save(actionsDto: ActionsDto, context: Context) {
-        ActionImpl(context).insert(actionsDto)
+        ActionsImpl(context).insert(actionsDto)
         println(actionsDto)
     }
 

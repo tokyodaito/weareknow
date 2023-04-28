@@ -55,7 +55,7 @@ class MainMenuViewModel(application: Application) : AndroidViewModel(application
                         )
                     }
                     Icon(
-                        iconImage = getAppIconByPackageName(context, appName)?.toString()?.toInt(),
+                        iconImage = null,
                         nameApp = getAppLabel(context, appName),
                         actions = actionList
                     )

@@ -2,7 +2,6 @@ package com.bogsnebes.weareknow.data.impl
 
 import android.content.Context
 import com.bogsnebes.weareknow.data.AppDatabase
-import com.bogsnebes.weareknow.data.TestObjects
 import com.bogsnebes.weareknow.data.dao.ActionsDao
 import com.bogsnebes.weareknow.data.dto.ActionsDto
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +20,13 @@ class ActionsImpl(context: Context) {
 
     suspend fun getAllActions(): List<ActionsDto> {
         return withContext(Dispatchers.IO) {
-            TestObjects.actions
+            actionDao.getAllActions()
+        }
+    }
+
+    fun deleteAllData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            actionDao.deleteAllData()
         }
     }
 }

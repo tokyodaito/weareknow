@@ -8,8 +8,11 @@ import android.text.TextUtils
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bogsnebes.weareknow.data.impl.ActionsImpl
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
+    private val actionsImpl: ActionsImpl = ActionsImpl(application)
+
     private var _deleteDataScreenState: MutableLiveData<DeleteDataScreenState> = MutableLiveData()
     val deleteDataScreenState: LiveData<DeleteDataScreenState>
         get() = _deleteDataScreenState
@@ -52,6 +55,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun deleteAllData() {
+        actionsImpl.deleteAllData()
         _deleteDataScreenState.value = DeleteDataScreenState.Result
     }
 

@@ -23,6 +23,9 @@ interface ActionsDao {
     @Query("SELECT * FROM actions WHERE id = :id")
     suspend fun getActionById(id: Long): ActionsDto?
 
+    @Query("DELETE FROM actions")
+    suspend fun deleteAllData()
+
     @Query("SELECT * FROM actions WHERE app_name = :appName")
     suspend fun getActionsByAppName(appName: String): List<ActionsDto>
 
