@@ -9,7 +9,7 @@ import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityEvent.*
 import com.bogsnebes.weareknow.accessibility.action.ActionBuilder
-import com.bogsnebes.weareknow.accessibility.action.ActionConst.TIME_UNIT
+import com.bogsnebes.weareknow.accessibility.action.ActionConst.TIMEUNIT_SEC
 import com.bogsnebes.weareknow.accessibility.action.ActionSaver
 import com.bogsnebes.weareknow.accessibility.action.ActionSubject.SYSTEM
 import com.bogsnebes.weareknow.accessibility.action.ActionSubject.USER
@@ -22,6 +22,9 @@ import java.util.concurrent.TimeUnit
 object EventProcessor {
     private const val SCROLL_DELAY = 700L
     private const val SCHEDULER_DELAY = 700L
+    private const val SYSTEM_GARBAGE = 550L
+
+    private val scheduler = SimpleScheduler()
 
     private var durationScroll = 0L
     private var firstScrollTime = 0L
@@ -75,28 +78,25 @@ object EventProcessor {
     }
 
     private fun processScroll(event: AccessibilityEvent) {
-        if (durationScroll == 0L) {
-            durationScroll = 1L
+        if (firstScrollTime == 0L && durationScroll == 0L) {
             firstScrollTime = SystemClock.elapsedRealtime()
             lastScrollTime = SystemClock.elapsedRealtime()
         } else {
             lastScrollTime = SystemClock.elapsedRealtime()
-            durationScroll += lastScrollTime - firstScrollTime
-        }
-        SimpleScheduler().schedule("scroll", SCHEDULER_DELAY, 0) {
-            val delay = SystemClock.elapsedRealtime() - lastScrollTime
-            if (delay > SCROLL_DELAY) {
-                if (durationScroll > 10)
-                    ActionSaver.save(ActionBuilder.createAction(
-                        listOf(
-                            VIEW, SCROLL,
-                            TimeUnit.MILLISECONDS.toSeconds(durationScroll).toString(),
-                            TIME_UNIT
-                        ).filter { it != "" }
-                    ))
-                durationScroll = 0
-                lastScrollTime = 0
-                firstScrollTime = 0
+            durationScroll = lastScrollTime - firstScrollTime
+            scheduler.schedule("scroll", SCHEDULER_DELAY) {
+                val delay = SystemClock.elapsedRealtime() - lastScrollTime
+                if (delay > SCROLL_DELAY) {
+                    if (durationScroll > SYSTEM_GARBAGE) {
+                        val dur = TimeUnit.MILLISECONDS.toSeconds(durationScroll).toString()
+                        ActionSaver.save(ActionBuilder.createAction(
+                            listOf(VIEW, SCROLL, dur, TIMEUNIT_SEC).filter { it != "" }
+                        ))
+                    }
+                    durationScroll = 0
+                    lastScrollTime = 0
+                    firstScrollTime = 0
+                }
             }
         }
     }

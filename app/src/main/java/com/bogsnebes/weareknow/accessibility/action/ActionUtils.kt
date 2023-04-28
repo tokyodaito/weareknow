@@ -3,7 +3,7 @@ package com.bogsnebes.weareknow.accessibility.action
 import java.sql.Timestamp
 
 object ActionConst{
-    const val TIME_UNIT = "у.е. времени"
+    const val TIMEUNIT_SEC = "сек."
 }
 
 object ActionSubject {
@@ -17,7 +17,7 @@ object ActionType {
     const val CLICK = "нажал"
     const val DRAG = "перенес"
     const val OPEN = "открыла"
-    const val SCROLL = "сколилось:"
+    const val SCROLL = "скролилось:"
 }
 
 object ActionObject {
