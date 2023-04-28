@@ -44,7 +44,7 @@ class ScreenshotCallBack(
             rect?.let {
                 currentView = cropBitmap(currentView, rect)
             }
-            val folder = File(context.applicationContext.externalCacheDir, "images")
+            val folder = File(context.applicationContext.externalCacheDir, "images/now")
             folder.mkdirs()
 
             val file = File(folder, SystemClock.elapsedRealtime().toString() + ".jpeg")
@@ -81,7 +81,7 @@ object AcsUtils {
     ): String {
         try {
             val bitmap = cropBitmap(currentView, rect)
-            val folder = File(context.applicationContext.externalCacheDir, "images")
+            val folder = File(context.applicationContext.externalCacheDir, "images/post")
             folder.mkdirs()
 
             val file = File(folder, SystemClock.elapsedRealtime().toString() + ".jpeg")
