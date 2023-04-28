@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -39,6 +41,8 @@ ext {
     constraintLayoutVersion = '2.1.4'
     flexboxVersion = '3.0.0'
     coilVersion = '2.3.0'
+    roomVersion = "2.5.1"
+    koinVersion = "3.1.3"
 }
 
 dependencies {
@@ -47,6 +51,12 @@ dependencies {
     implementation "com.google.android.material:material:$materialDesignVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation "com.google.android.flexbox:flexbox:$flexboxVersion"
+
     //  Work with images
     implementation "io.coil-kt:coil:$coilVersion"
+
+    // Database
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
 }
