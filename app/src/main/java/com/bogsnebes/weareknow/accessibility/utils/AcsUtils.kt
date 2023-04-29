@@ -38,7 +38,7 @@ fun cropBitmap(bitmap: Bitmap, rect: Rect): Bitmap {
 class ScreenshotCallBack(
     private val context: Context,
     private val compressionQuality: Int,
-    private val rect: Rect? = null,
+    val rect: Rect? = null,
     private val actionsDto: ActionsDto
 ) : TakeScreenshotCallback {
     override fun onSuccess(p0: ScreenshotResult) {
@@ -77,6 +77,12 @@ object AcsUtils {
     ) {
         if (SystemClock.elapsedRealtime() - lastScreenTime > intervalMillis)
             service.takeScreenshot(0, context.mainExecutor, callBack)
+        else
+            callBack.rect?.let {
+                takePostScreenshot(
+                    context, it
+                )
+            }
     }
 
     fun takePostScreenshot(

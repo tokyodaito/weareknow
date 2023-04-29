@@ -40,6 +40,7 @@ import com.bogsnebes.weareknow.accessibility.action.EventTypes.VIEW_TEXT_SELECTI
 import com.bogsnebes.weareknow.accessibility.action.EventTypes.VIEW_TEXT_TRAVERSED
 import com.bogsnebes.weareknow.accessibility.action.EventTypes.WINDOWS_CHANGED
 import com.bogsnebes.weareknow.accessibility.utils.AcsUtils.mkRect
+import com.bogsnebes.weareknow.accessibility.utils.AcsUtils.takeScreenshot
 import com.bogsnebes.weareknow.common.StatusSaver
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -62,8 +63,8 @@ object EventProcessor {
                 SimpleWorker.executeInBackground {
                     if (!StatusSaver.IS_ON) {
                         when (event.eventType) {
-                            TYPE_VIEW_CLICKED -> processClick(event, context)
-                            TYPE_VIEW_LONG_CLICKED -> processLongClick(event, context)
+                            TYPE_VIEW_CLICKED -> processClick(event, context, service)
+                            TYPE_VIEW_LONG_CLICKED -> processLongClick(event, context, service)
                             TYPE_VIEW_SCROLLED -> launch { processScroll(event, context) }
                             TYPE_VIEW_SELECTED -> processSelecting(event, context)
                             WINDOWS_CHANGE_ACTIVE, WINDOWS_CHANGE_BOUNDS -> processWindow(event, service, context)
@@ -86,7 +87,6 @@ object EventProcessor {
                             TYPE_VIEW_TEXT_CHANGED -> processViewTextChanged(event, context)
                             TYPE_VIEW_TEXT_SELECTION_CHANGED -> processViewTextSelectionChanged(event, context)
                             TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY -> processViewTextTraversed(event, context)
-                            TYPE_WINDOWS_CHANGED -> processWindowsChanged(event, context)
                             else -> {
                                 // Handle unknown or unexpected event types here if needed
                             }
@@ -219,14 +219,36 @@ object EventProcessor {
         )
     }
 
-    private fun processClick(event: AccessibilityEvent, context: Context) {
-        val screen = AcsUtils.takePostScreenshot(context, mkRect(event))
-        processAbstractNode(event, listOf(USER, CLICK, ON), context, screen)
+    @SuppressLint("NewApi")
+    private fun processClick(
+        event: AccessibilityEvent,
+        context: Context,
+        service: AccessibilityService
+    ) {
+        takeScreenshot(
+            service, context, ScreenshotCallBack(
+                context, 85, mkRect(event), ActionSaver.build(
+                    listOf(USER, CLICK, ON),
+                    event.packageName.toString(), null
+                )
+            )
+        )
     }
 
-    private fun processLongClick(event: AccessibilityEvent, context: Context) {
-        val screen = AcsUtils.takePostScreenshot(context, mkRect(event))
-        processAbstractNode(event, listOf(USER, CLICK, ON), context, screen)
+    @SuppressLint("NewApi")
+    private fun processLongClick(
+        event: AccessibilityEvent,
+        context: Context,
+        service: AccessibilityService
+    ) {
+        takeScreenshot(
+            service, context, ScreenshotCallBack(
+                context, 85, mkRect(event), ActionSaver.build(
+                    listOf(USER, CLICK, ON),
+                    event.packageName.toString(), null
+                )
+            )
+        )
     }
 
     private fun processSelecting(event: AccessibilityEvent, context: Context) {

@@ -15,4 +15,10 @@ data class ActionsDto(
     var action: String,
     @ColumnInfo(name = "screenshot_path")
     var screenshotPath: String? = null
-)
+
+
+) {
+    override fun toString(): String {
+        return "$date: $action ${if (screenshotPath != null) "with screen" else ""}"
+    }
+}
